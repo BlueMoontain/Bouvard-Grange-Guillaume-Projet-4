@@ -23,25 +23,25 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 	}
 	
 	@Override
-	public List<String> getSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
+	public ArrayList<String> getSymptoms(){
+	
+	ArrayList<String> symptoms = new ArrayList<String>();
 		
-		if (filepath != null) {
-			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
-				String line = reader.readLine();
-				
-				while (line != null) {
-					result.add(line);
-					line = reader.readLine();
-				}
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+		try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            String line = reader.readLine();
+            while (line != null) {
+                symptoms.add(line);
+                line = reader.readLine();
+            }
+            reader.close();
+        } 
+        
+		catch (IOException e) { 
+				System.out.println("Une erreur s'est produite");
 			}
-		}
 		
-		return result;
+		return symptoms ; //avant result
+		//{'headache','cold',...}
 	}
 
 }

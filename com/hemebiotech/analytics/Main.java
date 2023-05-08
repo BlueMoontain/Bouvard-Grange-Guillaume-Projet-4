@@ -2,5 +2,25 @@ package com.hemebiotech.analytics;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
-// WRITE YOUR CODE HERE
+
+public class Main {
+
+		    public static void main(String[] args) {
+
+		    	ISymptomReader reader = new ReadSymptomDataFromFile("symptoms.txt");
+
+		        ISymptomWriter writer = new WriteSymptomDataToFile();
+
+		        AnalyticsCounter counter = new AnalyticsCounter(reader, writer);
+
+		        ArrayList<String> symptoms = counter.getSymptoms();
+
+		        Map<String, Integer> symptomCounts = counter.countSymptoms(symptoms);
+
+		        Map<String, Integer> sortedSymptoms = counter.sortSymptoms(symptomCounts);
+
+		        counter.writeSymptoms(sortedSymptoms);
+		    }
+}
