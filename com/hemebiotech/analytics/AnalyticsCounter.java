@@ -1,80 +1,79 @@
 package com.hemebiotech.analytics;
 
-import java.util.LinkedList;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.FileWriter; 
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
-
-
+/**
+ * This class provides methods to count and sort symptoms and write them to a file.
+ */
 public class AnalyticsCounter {
+  ISymptomReader reader;
+  ISymptomWriter writer;
 
-    ISymptomReader reader;
-    ISymptomWriter writer;
+  /**
+   * Constructs an instance of AnalyticsCounter with the given ISymptomReader and ISymptomWriter.
+   * @param reader An implementation of ISymptomReader used to read symptoms from a data source.
+   * @param writer An implementation of ISymptomWriter used to write counted and sorted symptoms.
+   */
+  public AnalyticsCounter(ISymptomReader reader, ISymptomWriter writer) {
+    this.reader = reader;
+    this.writer = writer;
+  }
 
-    public AnalyticsCounter(ISymptomReader reader, ISymptomWriter writer) {
-        this.reader = reader;
-        this.writer = writer;
-    }
+  /**
+   * Reads the symptoms using the ISymptomReader provided during construction.
+   * @return An ArrayList of strings representing the symptoms.
+   */
+  public ArrayList<String> getSymptoms() {
+    ArrayList<String> symptoms = reader.getSymptoms();
 
-   public ArrayList<String> getSymptoms() {
-        ArrayList<String> symptoms = reader.getSymptoms();
-        return symptoms; 
-    }  
-// 
+    return symptoms;
+  }
 
-    public Map<String, Integer> countSymptoms(List<String> symptoms) {
+  /**
+   * Counts the number of occurrences of each symptom in the given list of symptoms.
+   * @param symptoms A list of symptoms to be counted.
+   * @return A map with the symptom as key and the number of occurrences as value.
+   */
+  public Map<String, Integer> countSymptoms(List<String> symptoms) {
     Map<String, Integer> countedSymptoms = new HashMap<>();
 
-    for (String symptom : symptoms) { //une boucle qui parcourt la liste des symptomes
-
-        if (countedSymptoms.containsKey(symptom)) { //vérifier que la clé (symptome) existe dans la map
-
-            int occurrences = countedSymptoms.get(symptom); 
-            countedSymptoms.put(symptom, occurrences + 1); //si elle existe, je rajoute +1 à la valeur (nb d'occurrences)
-        } 
-
-        else {
-            countedSymptoms.put(symptom, 1); //si elle existe pas, je l'ajoute à la map, avec une valeur de 1
-        }
+    for (String symptom : symptoms) {
+      if (countedSymptoms.containsKey(symptom)) {
+        int occurrences = countedSymptoms.get(symptom);
+        countedSymptoms.put(symptom, occurrences + 1);
+      } 
+      else {
+        countedSymptoms.put(symptom, 1);
+      }
     }
-    return countedSymptoms; // return countedSymptoms;
-        //{'headache' => 6, 'cold' => 4, 'maladie' => 1}
-        //et qui retourne une map
-        //une map ne peut pas avoir 2 clés identiques
-   
-    }
-    public Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) 
-    { 
-        TreeMap<String, Integer> sortedSymptoms = new TreeMap<>(symptoms);
-        return sortedSymptoms;
-    }
+    return countedSymptoms;
+  } 
 
-    public void writeSymptoms(Map<String, Integer> symptoms) {
+  /**
+   * Sorts the given map of symptoms by key.
+   * @param symptoms A map of symptoms to be sorted.
+   * @return A sorted TreeMap with the symptom as key and the number of occurrences as value.
+   */
+  public Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) { 
+    TreeMap<String, Integer> sortedSymptoms = new TreeMap<>(symptoms);
+    return sortedSymptoms;
+  }
 
-        writer.writeSymptoms(symptoms);
-         
-    // try {
-    //     FileWriter fileWriter = new FileWriter("result.out"); 
-    //     BufferedWriter bufferedWriter = new BufferedWriter(fileWriter); 
-
-    //     for (Map.Entry<String, Integer> entry : symptoms.entrySet()) { 
-    //         String symptom = entry.getKey();
-    //         int occurrence = entry.getValue();
-    //         bufferedWriter.write(symptom + " : " + occurrence); 
-    //         bufferedWriter.newLine();
-    //     }
-    //     bufferedWriter.close(); 
-
-    // } catch (IOException e) { 
-    //     System.out.println("Une erreur s'est produite");
-    // }
-}
+  /**
+   * Writes the given map of symptoms to a file using ISymptomWriter.
+   * @param symptoms A map of symptoms to be written to a file.
+   */
+  public void writeSymptoms(Map<String, Integer> symptoms) {
+    writer.writeSymptoms(symptoms);        
+  }
 }
