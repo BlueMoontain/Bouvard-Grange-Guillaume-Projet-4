@@ -37,9 +37,7 @@ public class WriteSymptomDataToFile implements ISymptomWriter {
         bufferedWriter.newLine();
       }
       bufferedWriter.close();
-    }
-  
-    catch (IOException e) {
+    } catch (IOException e) {
       System.out.println("An error occurred.");
     }
   }

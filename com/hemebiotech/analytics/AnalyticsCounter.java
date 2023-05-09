@@ -51,8 +51,7 @@ public class AnalyticsCounter {
       if (countedSymptoms.containsKey(symptom)) {
         int occurrences = countedSymptoms.get(symptom);
         countedSymptoms.put(symptom, occurrences + 1);
-      } 
-      else {
+      } else {
         countedSymptoms.put(symptom, 1);
       }
     }
